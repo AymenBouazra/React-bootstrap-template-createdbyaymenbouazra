@@ -1,26 +1,26 @@
+import './auth.css'
 import axios from 'axios';
 import { Formik } from 'formik';
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Register = () => {
   const navigate = useNavigate()
   return (
     <div className='d-flex w-50 mx-auto flex-column align-items-center mt-4'>
-      <h1 className='text-info'>Sign Up</h1>
       <Formik
         initialValues={{ userName: '', email: '', password: '' }}
         validate={values => {
           const errors = {};
           if (!values.userName) {
-            errors.userName = 'Required';
+            errors.userName = 'Username is equired';
           }
           if (!values.password) {
-            errors.password = 'Required';
+            errors.password = 'Password is required';
           }
           if (!values.email) {
-            errors.email = 'Required';
+            errors.email = 'Email is required';
           } else if (
             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
           ) {
@@ -28,9 +28,9 @@ const Register = () => {
           }
           return errors;
         }}
-        onSubmit={async(values, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           try {
-            const response =  await axios.post('http://localhost:4000/register', values)
+            const response = await axios.post('http://localhost:4000/register', values)
             navigate('/login')
             toast.success(response.data.message)
           } catch (error) {
@@ -48,41 +48,45 @@ const Register = () => {
           isSubmitting,
           /* and other goodies */
         }) => (
-          <form onSubmit={handleSubmit} className='d-flex flex-column w-100 p-4'>
-            <label>Username</label>
-            <input
-              type="text"
-              name="userName"
-              className='form-control'
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.userName}
-            />
-            <p className='text-danger px-4 py-2'>{errors.userName && touched.userName && errors.userName}</p>
-            <label>E-mail</label>
-            <input
-              type="email"
-              name="email"
-              className='form-control'
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-            />
-            <p className='text-danger px-4 py-2'>{errors.email && touched.email && errors.email}</p>
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              className='form-control'
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-            />
-            <p className='text-danger px-4 py-2'>{errors.password && touched.password && errors.password}</p>
-            <button type="submit" className='btn btn-info' disabled={isSubmitting}>
-              Register
-            </button>
-          </form>
+          <div className="form-box">
+            <form onSubmit={handleSubmit} className='form'>
+              <h1 className='text-info'>Sign up</h1>
+              <span className="subtitle">Create a free account with your email.</span>
+              <div className="form-container">
+                <input
+                  type="text"
+                  className={`input ${errors.userName && touched.userName && 'border border-danger'} `}
+                  name="userName"
+                  placeholder="Username"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.userName} />
+                {errors.userName && touched.userName && <span className='text-danger px-4 py-2'>{errors.userName}</span>}
+                <input
+                  type="email"
+                  className={`input ${errors.email && touched.email && 'border border-danger'} `}
+                  name="email"
+                  placeholder="Email"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email} />
+                {errors.email && touched.email && <span className='text-danger px-4 py-2'>{errors.email}</span>}
+                <input
+                  type="password"
+                  name="password"
+                  className={`input ${errors.password && touched.password && 'border border-danger'} `}
+                  placeholder="Password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password} />
+                {errors.password && touched.password && <span className='text-danger  px-4 py-2'> {errors.password}</span>}
+              </div>
+              <button type='submit'>Sign up</button>
+            </form>
+            <div className="form-section">
+              <p>Have an account? <Link className='text-primary' to="/login">Login</Link></p>
+            </div>
+          </div>
         )}
       </Formik>
     </div>

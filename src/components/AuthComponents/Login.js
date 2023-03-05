@@ -1,14 +1,14 @@
+import './auth.css'
 import axios from 'axios';
 import { Formik } from 'formik';
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate()
   return (
     <div className='d-flex w-50 mx-auto flex-column align-items-center mt-4'>
-      <h1 className='text-info'>Sign In</h1>
       <Formik
         initialValues={{ userName: '', email: '', password: '' }}
         validate={values => {
@@ -25,7 +25,7 @@ const Login = () => {
           }
           return errors;
         }}
-        onSubmit={ async (values, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           try {
             const response = await axios.post('http://localhost:4000/login', values)
             toast.success(response.data.message)
@@ -42,34 +42,38 @@ const Login = () => {
           handleChange,
           handleBlur,
           handleSubmit,
-          isSubmitting,
           /* and other goodies */
         }) => (
-          <form onSubmit={handleSubmit} className='d-flex flex-column w-100 p-4'>
-            <label>E-mail</label>
-            <input
-              type="email"
-              name="email"
-              className='form-control'
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-            />
-            <p className='text-danger px-4 py-2'>{errors.email && touched.email && errors.email}</p>
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              className='form-control'
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-            />
-            <p className='text-danger px-4 py-2'>{errors.password && touched.password && errors.password}</p>
-            <button type="submit" className='btn btn-info' disabled={isSubmitting}>
-              Login
-            </button>
-          </form>
+          <div className="form-box">
+            <form onSubmit={handleSubmit} className='form'>
+              <h1 className='text-info'>Sign In</h1>
+              <span className="subtitle">Login to your account with your email and password.</span>
+              <div className="form-container">
+                <input
+                  type="email"
+                  className={`input ${errors.email && touched.email && 'border border-danger'} `}
+                  name="email"
+                  placeholder="Email"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email} />
+                {errors.email && touched.email && <span className='text-danger px-4 py-2'>{errors.email}</span>}
+                <input
+                  type="password"
+                  name="password"
+                  className={`input ${errors.password && touched.password && 'border border-danger'} `}
+                  placeholder="Password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password} />
+                {errors.password && touched.password && <span className='text-danger  px-4 py-2'> {errors.password}</span>}
+              </div>
+              <button type='submit'>Sign in</button>
+            </form>
+            <div className="form-section">
+              <span>Don't have an account? <Link className='text-primary' to="/register">Register</Link> </span>
+            </div>
+          </div>
         )}
       </Formik>
     </div>

@@ -13,7 +13,7 @@ import routes from './routes'
 const Layout = React.lazy(() => import('./components/Layout'));
 const Login = React.lazy(() => import('./components/AuthComponents/Login'));
 const Register = React.lazy(() => import('./components/AuthComponents/Register'));
-const Loading = 
+const Loading =
   <div className="d-flex justify-content-center vh-100 align-items-center">
     <div className="spinner-grow text-info" role="status">
       <span className="visually-hidden">Loading...</span>
@@ -62,7 +62,7 @@ function App() {
         theme="colored"
       />
       <Suspense fallback={Loading}>
-      <RouterProvider router={router} fallbackElement={Loading}/>
+        <RouterProvider router={router} fallbackElement={Loading} />
 
       </Suspense>
     </div>
